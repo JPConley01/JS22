@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+    <head>
+        <meta charset="utf-8">
+        <title>Starcraft Rankings</title>
+        <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular.js" charset="utf-8"></script>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="app.css" media="screen" charset="utf-8">
+        <script src="dirPagination.js" charset="utf-8"></script>
+    </head>
+    <body ng-controller="rankCtrl">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <h1>Starcraft Rankings</h1>
+            </div>
+
+            <div class="panel panel-primary" id="stats-panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Overall Statistics</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-2 col-md-offset-4">
+                            <p>Total Players:
+                                <span class="stat">{{totalPlayers}}</span>
+                            </p>
+                        </div>
+                        <div class="col-md-2">
+                            <p>Total Games Played:
+                                <span class="stat">{{totalGamesPlayed}}</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-md-offset-3 race">
+                            <p>Percentage of Protoss:
+                                <span class="stat">{{perOfProtoss}}%</span>
+                            </p>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="{{perOfProtoss}}" aria-valuemin="0" aria-valuemax="100" style="width: {{perOfProtoss}}%;">
+                                    {{perOfProtoss}}%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 race">
+                            <p>Percentage of Terran:
+                                <span class="stat">{{perOfTerran}}%</span>
+                            </p>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="{{perOfTerran}}" aria-valuemin="0" aria-valuemax="100" style="width: {{perOfTerran}}%;">
+                                    {{perOfTerran}}%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 race">
+                            <p>Percentage of Zerg:
+                                <span class="stat">{{perOfZerg}}%</span>
+                            </p>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="{{perOfZerg}}" aria-valuemin="0" aria-valuemax="100" style="width: {{perOfZerg}}%;">
+                                    {{perOfZerg}}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">Search Players</div>
+                        <input type="text" class="form-control" ng-model="searchPlayers">
+                    </div>
+                </div>
+            </form>
+
+            <nav>
+                <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true"></dir-pagination-controls>
+            </nav>
+
+            <table class="table table-striped" id="myTable">
+                <thead>
+                    <tr>
+                        <th ng-repeat="title in names.cols">
+                            <a ng-click="changeSort(title)">{{title}}</a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr dir-paginate="player in names.data | orderBy:sortType:sortReverse | filter:searchPlayers | itemsPerPage:20">
+                        <td>{{player[0]}}</td>
+                        <td>{{player[1]}}</td>
+                        <td>{{player[2]}}
+                            <img ng-src="{{ getRegIcon(player[2]) }}"/></td>
+                        <td>{{player[3]}}
+                            <img ng-src="{{ getRaceIcon(player[3]) }}"/></td>
+                        <td>{{player[4]}}</td>
+                        <td>{{player[5]}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <script src="app.js" charset="utf-8"></script>
+    </body>
+</html>
